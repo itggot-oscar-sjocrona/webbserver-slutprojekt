@@ -1,0 +1,35 @@
+body{
+    background-color: hotpink;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+header{
+    background-color: blue;
+    margin: 0;
+    height: 10vh;
+    width: 100vw;
+}
+
+.container{
+    height: 90vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.home_form{
+    display: flex;
+    flex-direction: column;
+    padding: 100px;
+    border: 5px solid black;
+    height: 400px;
+}
+
+h1{
+    margin: 0;
+}
