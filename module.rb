@@ -1,10 +1,16 @@
 module Database
     def connect()
-        return SQLite::Database.new('/db/chatt_app.db')
+        return SQLite3::Database.new('./db/chatt_app.db')
     end
 
-    def register()
-        return  
+    def register(name, pass)
+        db = connect()
+        return db.execute("INSERT INTO users (username,password) VALUES(?,?)", [name, pass])
+    end
+
+    def login(username)
+        db = connect()
+        return db.execute("SELECT password FROM users WHERE username=?", [username])
     end
 
 end
