@@ -5,6 +5,9 @@ class App < Sinatra::Base
 	enable :sessions
 
 	get '/' do
+		session[:user] = nil
+		session[:profile_pic] = nil
+		session[:searched] = nil
 		slim(:home)
 	end
 
@@ -16,7 +19,16 @@ class App < Sinatra::Base
 	end
 
 	get('/main') do
-		slim(:main, locals:{user:session[:user]})
+		slim(:main, locals:{user:session[:user], pic:session[:profile_pic], search_results:session[:searched]})
+	end
+
+	post('/search') do
+		searched = params["username"]
+		results = search_for(searched)
+		results = results.join(',')
+		results = results.split(',')
+		session[:searched] = results
+		redirect('/main')
 	end
 
 	post '/login' do
@@ -32,6 +44,7 @@ class App < Sinatra::Base
 		end
 		if password_digest == password
 			session[:user] = username
+			session[:profile_pic] = get_pic(session[:user])
 			redirect('/main')
 		else
 			session[:error_msg] = "Incorrect login"

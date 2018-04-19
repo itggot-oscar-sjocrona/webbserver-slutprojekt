@@ -13,4 +13,14 @@ module Database
         return db.execute("SELECT password FROM users WHERE username=?", [username])
     end
 
+    def get_pic(username)
+        db = connect()
+        return db.execute("SELECT picture_url FROM users WHERE username=?", [username])
+    end
+
+    def search_for(user)
+        db = connect()
+        user = "%"+user+"%"
+        return db.execute("SELECT username FROM users WHERE username LIKE ?", [user])
+    end
 end
