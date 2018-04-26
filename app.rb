@@ -6,7 +6,6 @@ class App < Sinatra::Base
 
 	get '/' do
 		session[:user] = nil
-		session[:profile_pic] = nil
 		session[:searched] = nil
 		slim(:home)
 	end
@@ -19,16 +18,39 @@ class App < Sinatra::Base
 	end
 
 	get('/main') do
-		slim(:main, locals:{user:session[:user], pic:session[:profile_pic], search_results:session[:searched]})
+		if session[:user] != nil
+			slim(:main, locals:{user:session[:user]})
+		else
+			redirect('/')
+		end
+	end
+
+	get('/main/:id') do
+		if session[:user] != nil
+			to_id = params[:id]
+			direct_msg(session[:user], to_id)
+			slim(:main, locals:{user:session[:user]})
+		else
+			redirect('/')
+		end
+	end
+
+	get('/search') do
+		if session[:user] != nil
+			slim(:search, locals:{results:session[:searched], user:session[:user]})
+		else
+			redirect('/')
+		end
 	end
 
 	post('/search') do
-		searched = params["username"]
-		results = search_for(searched)
-		results = results.join(',')
-		results = results.split(',')
-		session[:searched] = results
-		redirect('/main')
+		if session[:user] != nil
+			searched = params["username"]
+			session[:searched] = search_for(searched)
+			redirect('/search')
+		else
+			redirect('/')
+		end
 	end
 
 	post '/login' do
@@ -44,7 +66,6 @@ class App < Sinatra::Base
 		end
 		if password_digest == password
 			session[:user] = username
-			session[:profile_pic] = get_pic(session[:user])
 			redirect('/main')
 		else
 			session[:error_msg] = "Incorrect login"
@@ -57,6 +78,12 @@ class App < Sinatra::Base
 		username = params["username"]
 		password1 = params["password"]
 		password2 = params["confirmed_password"]
+
+		if username.include? ","
+			session[:error_msg] = "Illegal characters"
+			session[:direction] = "/"
+			redirect('/error')	
+		end
 
 		if password1 != password2
 			session[:error_msg] = "Passwords doesn't match"

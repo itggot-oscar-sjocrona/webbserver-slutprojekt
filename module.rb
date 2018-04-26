@@ -21,6 +21,10 @@ module Database
     def search_for(user)
         db = connect()
         user = "%"+user+"%"
-        return db.execute("SELECT username FROM users WHERE username LIKE ?", [user])
+        return db.execute("SELECT id,username FROM users WHERE username LIKE ?", [user])
+    end
+
+    def direct_msg(to, from)
+        db = connect()
     end
 end
