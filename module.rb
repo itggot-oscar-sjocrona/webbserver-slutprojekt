@@ -87,8 +87,6 @@ module Censor # Kollaboration med William Eriksson
         edited_message = []
         message.each do |word|
             word1 = word
-            p ugly_words
-            p word.downcase
             if ugly_words.include?(word.downcase)
                 y = word.length
                 x = '*'
