@@ -1,0 +1,21 @@
+div class="chat"
+    - user_id_name = {}
+    - users.each do |user|
+        - user_id_name[user[0]] = user[1]
+    - messages.each do |message|
+        div class="message"
+            p class="message_poster"
+                = "Sent by " + user_id_name[message[3].to_i]
+            p class="message_text"
+                = message[2]
+    form class='room_form' action="/main/post_message/#{room_id}" method="POST"
+        input type="text" name="message" placeholder="POST!"
+        input type="submit" value="Send"
+div class="invite"
+    h3 Invite to group
+    input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+    ul id="myUL"
+        - all_users.each do |user|
+            li
+                a href="/main/invite/#{user[0]}/#{room_id}" = user[1]
+script src="/js/js.js"

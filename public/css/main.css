@@ -34,3 +34,17 @@ header{
 h1{
     margin: 0;
 }
+
+.room_form{
+    margin-top: 2px;
+}
+
+.room{
+    margin-bottom: -2px;
+    border-bottom: 2px inset black;
+    border-top: 2px inset black;
+}
+
+.message{
+    border-bottom: 2px inset black;
+}
